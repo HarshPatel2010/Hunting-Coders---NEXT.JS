@@ -1,9 +1,51 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react';
+import Link from 'next/link';
+import styles from '../styles/Blog.module.css'
 
-const blog = () => {
+const Blog = () => {
+  const [blog, setblog] = useState([])
+  useEffect(() => {
+  fetch("http://localhost:3000/api/blogs")
+  .then((data)=>{
+   return data.json()})
+   .then((parsed)=>{
+     console.log(parsed)
+     setblog(parsed)
+   })
+
+},[])
+  
   return (
-    <div>this is blog</div>
+    <div  className={styles.container}>
+       <main className={styles.main}>
+    {
+      blog.map((blogItem)=>{
+        return   <div className={styles.blogItemh3} key={blogItem.title}>
+        <Link href={`/blogpost/${blogItem.slug}`}>
+        <h3>{blogItem.title}</h3>
+        </Link>
+        <p>{blogItem.content.substr(0,140)}</p>
+      </div>
+      })
+    }
+
+   <div className={styles.blogItemh3}>
+     <Link href="/blogpost/learn-javascript">
+     <h3>How to learn javascript in 2022</h3>
+     </Link>
+     <p>Javascript is the language used to design logic for the web</p>
+   </div>
+   <div className="blogItem">
+     <h3>How to learn javascript in 2022</h3>
+     <p>Javascript is the language used to design logic for the web</p>
+   </div>
+   <div className="blogItem">
+     <h3>How to learn javascript in 2022</h3>
+     <p>Javascript is the language used to design logic for the web</p>
+   </div>
+   </main>
+  </div>
   )
 }
 
-export default blog
+export default Blog
